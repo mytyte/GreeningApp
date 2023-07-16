@@ -51,10 +51,10 @@ public class MainActivity extends FragmentActivity {
         mPager = findViewById(R.id.viewpager);
         mPager01 = findViewById(R.id.viewpager01);
         // Adapter
-        FragmentStateAdapter pagerAdapter = new MyAdapter(this, num_page);//
+        FragmentStateAdapter pagerAdapter = new MainAdapter(this, num_page);//
         mPager.setAdapter(pagerAdapter);
 
-        FragmentStateAdapter pagerAdapter01 = new MyAdapter01(this, num_page01);
+        FragmentStateAdapter pagerAdapter01 = new MainAdapter01(this, num_page01);
         mPager01.setAdapter(pagerAdapter01);
 
         // Indicator 초기화 및 설정

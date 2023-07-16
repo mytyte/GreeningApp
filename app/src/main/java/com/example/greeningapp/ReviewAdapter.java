@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,11 +16,11 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.CustomViewHolder> {
-    private ArrayList<ProductMain> arrayList;
+public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomViewHolder>{
+    private ArrayList<ReviewMain> arrayList;
     private Context context;
 
-    public ProductAdapter(ArrayList<ProductMain> arrayList, MainActivity mainActivity) {
+    public ReviewAdapter(ArrayList<ReviewMain> arrayList, ReviewActivity reviewActivity) {
         this.arrayList = arrayList;
         this.context = context;
     }
@@ -26,7 +28,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.CustomVi
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mainlist_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.review_item, parent, false);
         CustomViewHolder holder = new CustomViewHolder(view);
         return holder;
     }
@@ -34,12 +36,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.CustomVi
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         Glide.with(holder.itemView)
-                .load(arrayList.get(position).getPimg())
-                .into(holder.iv_pimg);
-        holder.pname.setText(arrayList.get(position).getPname());
-        holder.tv_pprice.setText(String.valueOf(arrayList.get(position).getPprice()));
+                .load(arrayList.get(position).getReview_image())
+                .into(holder.inputimg);
+        holder.reviewdes.setText(String.valueOf(arrayList.get(position).getWrite_review()));
+        holder.userrating.setRating(arrayList.get(position).getRating());
+
+
 
     }
+
     @Override
     public int getItemCount() {
         //삼합연산자
@@ -47,15 +52,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.CustomVi
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_pimg;
-        TextView pname;
-        TextView tv_pprice;
+        ImageView inputimg;
+        RatingBar userrating;
+        TextView reviewdes;
+
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.iv_pimg = itemView.findViewById(R.id.iv_pimg);
-            this.pname = itemView.findViewById(R.id.pname);
-            this.tv_pprice = itemView.findViewById(R.id.tv_pprice);
+            this.inputimg = itemView.findViewById(R.id.inputimg);
+            this.reviewdes = itemView.findViewById(R.id.reviewdes);
+            this.userrating = itemView.findViewById(R.id.userrating);
+
+
         }
     }
+
+
 }
