@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -24,9 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ReviewActivity extends AppCompatActivity {
-    //총 평점
-    private RatingBar ratingBar;
-    private TextView value;
 
     //전체리뷰
 
@@ -45,7 +41,6 @@ public class ReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_review);
 
 
-        SetupRatingBar();
         //버튼클릭
         Button button = findViewById(R.id.button);    //터치x
 
@@ -89,19 +84,50 @@ public class ReviewActivity extends AppCompatActivity {
         adapter = new ReviewAdapter(arrayList, this);
         fullreviewrecyclerView.setAdapter(adapter);  //리사이클뷰에 어댑터연결
 
-    }
+        // 파이어베이스 데이터베이스 참조 설정 (레이팅바 총점)
+        FirebaseDatabase mRef = FirebaseDatabase.getInstance();
+        DatabaseReference ratingsRef = mRef.getReference("Review");
 
-    //포토리뷰 //레이팅바(리뷰수)
-    public void SetupRatingBar(){
-        ratingBar = findViewById(R.id.reviewRating);
-        value =  findViewById(R.id.value);
+        // 파이어베이스 데이터베이스에서 데이터 읽기(레이팅바 총점)
+        ratingsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                float totalRating = 0;
+                int ratingCount = 0;
 
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                value.setText(String.valueOf(rating));
+                for (DataSnapshot ratingSnapshot : dataSnapshot.getChildren()) {
+                    float rating = ratingSnapshot.child("Rating").getValue(Float.class);
+                    totalRating += rating;
+                    ratingCount++;
+                }
+
+                float averageRating = 0;
+                if (ratingCount != 0) {
+                    averageRating = totalRating / ratingCount;
+                }
+                String formattedRating = String.format("%.2f", averageRating);
+
+                TextView reviewRating = findViewById(R.id.value);
+                reviewRating.setText(formattedRating);
+
+                // 계산된 평점 값을 레이팅바에 표시
+                RatingBar ratingBar = findViewById(R.id.reviewRating);
+                float scaledRating = Math.round(averageRating * 5 / 5.0f);  // 평점 값을 5로 스케일링하고 소수점 자리 반올림
+                ratingBar.setRating(scaledRating);
+                // ratingBar.setRating(averageRating);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 처리 오류가 발생한 경우에 대한 예외 처리를 수행할 수 있습니다.
             }
         });
+
+
+
+
+
     }
+
 
 
 }

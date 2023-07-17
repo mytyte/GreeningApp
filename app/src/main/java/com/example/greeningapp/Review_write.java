@@ -24,6 +24,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class Review_write extends AppCompatActivity {
     FirebaseDatabase mDatabase;
     DatabaseReference mRef;
@@ -38,6 +42,8 @@ public class Review_write extends AppCompatActivity {
 
     Uri imageUrl=null;
     ProgressDialog progressDialog;
+
+    TextView mDate;  //날짜
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +62,16 @@ public class Review_write extends AppCompatActivity {
         mStorage=FirebaseStorage.getInstance();
         progressDialog=new ProgressDialog(this);
 
+        //날짜 표시
+        mDate = findViewById(R.id.reviewDate);
+
+        String dateTimeFormat = "yyyy.MM.dd";
+        Date date = Calendar.getInstance().getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateTimeFormat);
+        String formattedDate = simpleDateFormat.format(date);
+        mDate.setText(formattedDate);
 
 
-        //리뷰작성 (날짜)
-        //Calendar calendar = Calendar.getInstance();
-        //String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
-
-        //TextView textViewDate = findViewById(R.id.reviewDate);
-        //textViewDate.setText(currentDate);
 
 
         selectedimgBtn.setOnClickListener(new View.OnClickListener() {
@@ -126,9 +134,15 @@ public class Review_write extends AppCompatActivity {
 
                                     newPost.child("Write_review").setValue(fn);
                                     newPost.child("Review_image").setValue(task.getResult().toString());
-
+                                    // 추가: 레이팅바 평점 저장
                                     float rating = EtRatingBar.getRating();
                                     newPost.child("Rating").setValue(rating);
+
+                                    //날짜 저장
+                                    String date = mDate.getText().toString();
+                                    newPost.child("Review_date").setValue(date);
+
+
 
 
 

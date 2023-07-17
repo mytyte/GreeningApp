@@ -4,6 +4,7 @@ public class ReviewMain {
     private String Review_image;
     private String Write_review;
     private int Rating;
+    private String Review_date;
 
 
     public ReviewMain() {   }
@@ -25,4 +26,8 @@ public class ReviewMain {
     public void setRating(int rating) {
         Rating = rating;
     }
+
+    public String getReview_date() { return Review_date; }
+
+    public void setReview_date(String review_date) { this.Review_date = Review_date; }
 }

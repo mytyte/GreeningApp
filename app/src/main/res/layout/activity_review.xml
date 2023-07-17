@@ -55,12 +55,11 @@
                     android:layout_marginLeft="45dp"
                     android:layout_marginRight="27dp"
                     android:contentDescription="별점을 선택하세요"
-                    android:isIndicator="false"
+                    android:isIndicator="true"
                     android:max="5"
-                    android:min="0"
                     android:numStars="5"
                     android:progressTint="@android:color/holo_orange_light"
-                    android:rating="4.5"
+                    android:rating="0"
                     android:stepSize="0.5" />
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -77,53 +76,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text=" /5 (리뷰수)"
+                        android:text=" /5 "
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
 
             </LinearLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/phtreviewname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="포토 리뷰"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.044"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.022"/>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <GridView
-                android:id="@+id/gridview01"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                android:columnWidth="60dp"
-                android:gravity="center"
-                android:horizontalSpacing="3dp"
-                android:numColumns="4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="16dp"
-                android:background="#BADDBC" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

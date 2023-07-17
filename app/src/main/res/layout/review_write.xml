@@ -37,11 +37,12 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="18sp"
-        android:text="2023.07.30"/>
+        android:text=""/>
 
     <RatingBar
         android:id="@+id/EtRatingBar"
         style="?android:attr/ratingBarStyleIndicator"
+        android:progressTint="@android:color/holo_orange_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

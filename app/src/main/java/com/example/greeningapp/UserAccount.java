@@ -7,6 +7,7 @@ public class UserAccount {
     private String idToken;  //Firebase Uid(고유 토큰정보)
     private String emailId;  //이메일 아이디
     private String password; //비밀번호
+    private String regdate; //날짜
 
     public UserAccount() { }
 
@@ -35,4 +36,7 @@ public class UserAccount {
     {
         this.password = password;
     }
+
+    public String getRegdate() { return regdate; }
+    public void setRegdate(String regdate) { this.regdate = regdate; }
 }
