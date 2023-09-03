@@ -55,7 +55,6 @@ public class OrderHistoryParentRcyAdapter extends RecyclerView.Adapter<OrderHist
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         public TextView orderDate;
         public RecyclerView childRecyclerView;
 

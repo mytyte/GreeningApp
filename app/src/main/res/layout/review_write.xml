@@ -64,7 +64,7 @@
             <EditText
                 android:id="@+id/writeReviewEt"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="172dp"
                 android:gravity="top"
                 android:hint="후기를 작성해주세요"
                 android:inputType="textMultiLine"

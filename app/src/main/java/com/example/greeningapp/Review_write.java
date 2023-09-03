@@ -157,7 +157,6 @@ public class Review_write extends AppCompatActivity {
                     reviewwriteMap.put("Review_date", reviewDate);
 
 
-
                     mRef.push().setValue(reviewwriteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

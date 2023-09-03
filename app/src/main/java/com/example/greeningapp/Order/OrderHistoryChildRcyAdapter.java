@@ -85,8 +85,8 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
         if ("No".equals(isReviewCompleted)) {
 
         } else if ("Yes".equals(isReviewCompleted)) {
-            holder.ordhreviewBtn.setText("작성 완료");
-            holder.ordhreviewBtn.setEnabled(false);
+//            holder.ordhreviewBtn.setText("작성 완료");
+//            holder.ordhreviewBtn.setEnabled(false);
         }
 
         holder.ordhreviewBtn.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +98,8 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
 //                    Log.d("Order", String.valueOf(childModelArrayList.get(position)+"가져왔음"));
                     cxt.startActivity(intent);
                 } else if ("Yes".equals(isReviewCompleted)) {
+                    holder.ordhreviewBtn.setText("작성 완료");
+                    holder.ordhreviewBtn.setEnabled(false);
                 }
             }
         });

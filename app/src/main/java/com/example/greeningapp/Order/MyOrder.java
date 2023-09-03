@@ -23,7 +23,7 @@ public class MyOrder implements Serializable {
 
     private ArrayList<MyOrder> childModelArrayList;
 
-    public MyOrder() {  }
+    public MyOrder(){}
 
     public String getDoReview() {
         return doReview;
