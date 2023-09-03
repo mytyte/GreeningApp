@@ -25,21 +25,18 @@ import java.util.ArrayList;
 public class ReviewActivity extends AppCompatActivity {
 
     //전체리뷰
-
     private RecyclerView fullreviewrecyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<ReviewMain> arrayList;
+    private ArrayList<ReviewData> dataList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
-
 
         //버튼클릭
         Button button = findViewById(R.id.button);    //터치x
@@ -57,10 +54,9 @@ public class ReviewActivity extends AppCompatActivity {
         fullreviewrecyclerView.setHasFixedSize(true); //리사이클뷰 성능강화
         layoutManager = new LinearLayoutManager(this);
         fullreviewrecyclerView.setLayoutManager(layoutManager);
-        arrayList = new ArrayList<>(); //Product객체를 담을 ArrayList(어댑터쪽으로)
+        dataList = new ArrayList<>(); //Product객체를 담을 ArrayList(어댑터쪽으로)
 
         database = FirebaseDatabase.getInstance(); //파이어베이스 연동
-
         databaseReference = database.getReference("Review");//db데이터연결
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -68,10 +64,10 @@ public class ReviewActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //파이어베이스 데이터베이스의 데이터를 받아오는곳
-                arrayList.clear(); //기준 배열리스트가 존재하지않게 초기화(데이터가 쌓이기때문)
+                dataList.clear(); //기준 배열리스트가 존재하지않게 초기화(데이터가 쌓이기때문)
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) { //반복문으로 데이터리스트 추출
-                    ReviewMain review = snapshot.getValue(ReviewMain.class);  //만들어뒀던 review객체에 데이터를 담는다( 리뷰작성시 )
-                    arrayList.add(review); //담은 데이터들을 배열리스트에 넣고 리사이클뷰로 보낼준비
+                    ReviewData review = snapshot.getValue(ReviewData.class);  //만들어뒀던 review객체에 데이터를 담는다( 리뷰작성시 )
+                    dataList.add(review); //담은 데이터들을 배열리스트에 넣고 리사이클뷰로 보낼준비
                 }
                 adapter.notifyDataSetChanged(); //리스트저장 및 새로고침
                 //db가져오던중 에러발생시
@@ -81,7 +77,7 @@ public class ReviewActivity extends AppCompatActivity {
                 Log.e("ReviewActivity", String.valueOf(databaseError.toException())); //에러문출력
             }
         });
-        adapter = new ReviewAdapter(arrayList, this);
+        adapter = new ReviewAdapter(dataList, this);
         fullreviewrecyclerView.setAdapter(adapter);  //리사이클뷰에 어댑터연결
 
         // 파이어베이스 데이터베이스 참조 설정 (레이팅바 총점)
@@ -122,12 +118,6 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
-
-
 
 }

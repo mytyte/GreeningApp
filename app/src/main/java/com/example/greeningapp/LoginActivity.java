@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.greeningapp.shop.ShoppingMainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -18,57 +19,62 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
-    private FirebaseAuth mFirebaseAuth;       //파이어베이스 인증
-    private DatabaseReference mDatabaseRef;  //실시간 데이터베이스
-    private EditText mETEmail, mETPwd;       //로그인 입력필드
+    private FirebaseAuth mFirebaseAuth; // 파이어베이스 인증 처리
+    private DatabaseReference mDatabaseRef; // 실시간 데이터베이스
+    private EditText mEtEmail, mEtPwd; // 로그인 입력필드
+
+    String strEmail;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("User");
 
-        mFirebaseAuth =FirebaseAuth.getInstance();
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("UserAccount");
+        mEtEmail = findViewById(R.id.et_email);
+        mEtPwd = findViewById(R.id.et_pwd);
 
-        mETEmail = findViewById(R.id.et_email);
-        mETPwd = findViewById(R.id.et_pwd);
+        Intent receivedIntent = getIntent();
+        if (receivedIntent != null && receivedIntent.hasExtra("userEmail")) {
+            strEmail = receivedIntent.getStringExtra("userEmail");
+            mEtEmail.setText(strEmail);
+        }
 
 
-        Button btn_login = findViewById ( R.id.btn_login);
-        btn_login.setOnClickListener(new View.OnClickListener()
-        {
+        Button btn_login = findViewById(R.id.btn_login);
+        btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                //로그인 요청
-                String strEmail = mETEmail.getText().toString();
-                String strPwd = mETPwd.getText().toString();
+            public void onClick(View v) {
+                // 로그인 요청
+
+                strEmail = mEtEmail.getText().toString();
+                String strPwd = mEtPwd.getText().toString();
 
                 mFirebaseAuth.signInWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //로그인 성공!!!
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        if(task.isSuccessful()){
+                            //로그인 성공
+                            Intent intent = new Intent(LoginActivity.this, ShoppingMainActivity.class);
                             startActivity(intent);
-                            finish(); // 현재 액티비티 파괴
-                        } else {
-                            Toast.makeText(LoginActivity.this, "로그인 실패..!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else{
+                            Toast.makeText(LoginActivity.this, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+
             }
         });
 
-
-        Button btn_register = findViewById ( R.id.btn_register);
+        Button btn_register = findViewById(R.id.btn_register);
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                //회원가입 화면 이동
+            public void onClick(View v) {
+                // 회원가입 화면으로 이동
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }

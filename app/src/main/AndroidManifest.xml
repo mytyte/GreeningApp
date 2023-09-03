@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +15,30 @@
         android:theme="@style/Theme.GreeningApp"
         tools:targetApi="31">
         <activity
+            android:name=".quiz.FragmentEnd"
+            android:exported="false" />
+        <activity
+            android:name=".quiz.FragmentFailure"
+            android:exported="false" />
+        <activity
+            android:name=".quiz.FragmentHome"
+            android:exported="false" />
+        <activity
+            android:name=".quiz.FragmentQList"
+            android:exported="false" />
+        <activity
+            android:name=".quiz.FragmentQuestion"
+            android:exported="false" />
+        <activity
+            android:name=".quiz.FragmentSuccess"
+            android:exported="false" />
+        <activity
+            android:name=".quiz.FragmentStart"
+            android:exported="false" />
+        <activity
+            android:name=".quiz.QuizActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
@@ -21,16 +47,43 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
+        <activity android:name=".RegisterActivity" />
         <activity
             android:name=".LogoutActivity"
             android:exported="true" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".shop.ShoppingMainActivity" />
+        <activity
+            android:name=".Order.OrderCompleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Order.OrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Order.PointHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Donation.DonationCompleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Donation.DonationMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Donation.DonationDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Cart.CartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Attendance.AttendanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Cart.ProductDetailActivity"
+            android:exported="false" />
+        <activity android:name=".Order.OrderHistoryActivity" />
+        <activity android:name=".Review_write" />
+        <activity android:name=".ReviewActivity" />
 
-        </activity>
     </application>
 
 </manifest>

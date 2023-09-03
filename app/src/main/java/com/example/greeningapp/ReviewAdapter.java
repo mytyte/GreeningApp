@@ -17,11 +17,11 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomViewHolder>{
-    private ArrayList<ReviewMain> arrayList;
+    private ArrayList<ReviewData> dataList;
     private Context context;
 
-    public ReviewAdapter(ArrayList<ReviewMain> arrayList, ReviewActivity reviewActivity) {
-        this.arrayList = arrayList;
+    public ReviewAdapter(ArrayList<ReviewData> dataList,  Context context ) {
+        this.dataList = dataList;
         this.context = context;
     }
 
@@ -36,20 +36,18 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomView
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         Glide.with(holder.itemView)
-                .load(arrayList.get(position).getReview_image())
+                .load(dataList.get(position).getReview_image())
                 .into(holder.inputimg);
-        holder.reviewdes.setText(String.valueOf(arrayList.get(position).getWrite_review()));
-        holder.userrating.setRating(arrayList.get(position).getRating());
-        holder.reviewdate.setText(arrayList.get(position).getReview_date());
-
-
+        holder.reviewdes.setText(String.valueOf(dataList.get(position).getWrite_review()));
+        holder.userrating.setRating(dataList.get(position).getRating());
+        holder.reviewdate.setText(dataList.get(position).getReview_date());
 
     }
 
     @Override
     public int getItemCount() {
         //삼합연산자
-        return (arrayList !=null ? arrayList.size() :0);
+        return (dataList !=null ? dataList.size() :0);
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
@@ -64,7 +62,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomView
             this.reviewdes = itemView.findViewById(R.id.reviewdes);
             this.userrating = itemView.findViewById(R.id.userrating);
             this.reviewdate = itemView.findViewById(R.id.reviewdate);
-
 
         }
     }
