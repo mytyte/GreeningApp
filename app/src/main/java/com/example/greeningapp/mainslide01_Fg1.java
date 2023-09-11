@@ -16,6 +16,7 @@ public class mainslide01_Fg1 extends Fragment {
                 R.layout.slide01_main1, container, false);
 
         return rootView;
+
     }
 
 }

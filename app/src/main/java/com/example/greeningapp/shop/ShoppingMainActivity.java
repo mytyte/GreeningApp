@@ -15,6 +15,7 @@ import com.example.greeningapp.Cart.CartActivity;
 import com.example.greeningapp.Cart.Product;
 import com.example.greeningapp.Cart.ProductAdapter;
 import com.example.greeningapp.Donation.DonationMainActivity;
+import com.example.greeningapp.MainActivity;
 import com.example.greeningapp.Order.OrderHistoryActivity;
 import com.example.greeningapp.R;
 import com.example.greeningapp.ReviewActivity;
@@ -117,7 +118,7 @@ public class ShoppingMainActivity extends AppCompatActivity  {
         btnQuizMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShoppingMainActivity.this, QuizActivity.class);
+                Intent intent = new Intent(ShoppingMainActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });

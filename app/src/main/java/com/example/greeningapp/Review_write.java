@@ -18,8 +18,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.greeningapp.Cart.Product;
 import com.example.greeningapp.Order.MyOrder;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,9 +32,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -61,6 +66,7 @@ public class Review_write extends AppCompatActivity {
     TextView Pname;
     ImageView Pimg;
 
+    private String orderId,myOrderId, eachOrderedId;
 
     TextView mDate;  //날짜
 
@@ -93,21 +99,26 @@ public class Review_write extends AppCompatActivity {
         String formattedDate = simpleDateFormat.format(date);
         mDate.setText(formattedDate);
 
-//        Pname = findViewById(R.id.writePname);
-//        Pimg = (ImageView) findViewById(R.id.writePImg);
+        Pname = findViewById(R.id.writePname);
+        Pimg = (ImageView) findViewById(R.id.writePImg);
 
-//        final Object object = getIntent().getSerializableExtra("product");
-//
-//        if(object instanceof MyOrder){
-//            product = (MyOrder) object;
-//            Log.d("Review_write", product+"");
-//        }
-//
-//        if (product != null) {
-//            Pname.setText(product.getProductName());
-//            Glide.with(getApplicationContext()).load(product.getOrderImg()).into(Pimg);
-//
-//        }
+        final Object object = getIntent().getSerializableExtra("product");
+
+        if(object instanceof MyOrder){
+            product = (MyOrder) object;
+            Log.d("Review_write", product+"");
+        }
+
+        if (product != null) {
+            Pname.setText(product.getProductName());
+            Glide.with(getApplicationContext()).load(product.getOrderImg()).into(Pimg);
+
+            orderId = product.getOrderId();
+            eachOrderedId = product.getEachOrderedId();
+//            Log.d("Review", "orderId = " + orderId);
+            Log.d("Review",product.getProductName());
+        }
+
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,8 +127,6 @@ public class Review_write extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
         uploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,20 +160,27 @@ public class Review_write extends AppCompatActivity {
 
                     // Create a HashMap to store the review data
                     HashMap<String, Object> reviewwriteMap = new HashMap<>();
+                    reviewwriteMap.put("pid", product.getProductId());
+                    reviewwriteMap.put("pname", product.getProductName());
+                    reviewwriteMap.put("pimg", product.getOrderImg());
+                    reviewwriteMap.put("username", product.getUserName());
+
                     reviewwriteMap.put("Review_image", reviewImage);
                     reviewwriteMap.put("Write_review", fn);
                     reviewwriteMap.put("Rating", rating);
                     reviewwriteMap.put("Review_date", reviewDate);
 
-
                     mRef.push().setValue(reviewwriteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                // Firebase 데이터 쓰기가 성공한 경우
-//                                Intent intent = getIntent();
-//                                MyOrder product = (MyOrder) intent.getSerializableExtra("product");
-                                product.setDoReview("Yes");
+                                databaseReference.child(product.getOrderId()).child(product.getEachOrderedId()).child("doReview").setValue("Yes").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("Myreview", "myOrderId: " + myOrderId);
+                                        Log.d("eachorderid", "eachOrderedId: " + eachOrderedId);
+                                    }
+                                });
 
                             } else {
                                 // Firebase 데이터 쓰기가 실패한 경우
@@ -172,73 +188,6 @@ public class Review_write extends AppCompatActivity {
                             }
                         }
                     });
-
-//                    mRef.push().setValue(reviewwriteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            if (task.isSuccessful()) {
-//                                // 데이터가 성공적으로 추가되었을 때
-////                                Query query = databaseReference.orderByChild("doReview").equalTo("false");
-//
-//                                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                                            // 각 데이터의 경로 가져오기
-////                                            DatabaseReference dataToUpdateRef = snapshot.getRef();
-//                                            String doReview = ""+snapshot.child("doReview").getValue();
-//                                            if (doReview.equals("false")){
-//                                                snapshot.child("doReview").getRef().setValue("true");
-//                                            }
-//
-////                                            // "doReview" 값을 "true"로 업데이트
-////                                            Intent intent = getIntent();
-////                                            MyOrder product = (MyOrder) intent.getSerializableExtra("product");
-////                                            product.setDoReview("true");
-////                                            dataToUpdateRef.child("doReview").setValue("true");
-//                                        }
-//                                    }
-//                                    @Override
-//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//                                        // 쿼리 취소 또는 실패 시 처리
-//                                    }
-//                                });
-//                            } else {
-//                                // 데이터 추가가 실패한 경우
-////                                Log.e("Firebase", "Data write failed: " + task.getException().getMessage());
-//                            }
-//                        }
-//                    });
-
-//                    mRef.push().setValue(reviewwriteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            if (task.isSuccessful()) {
-//                             databaseReference.getKey().child("doReview").setValue("true").addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<Void> task) {
-//                                                    if (task.isSuccessful()) {
-//                                                        Log.d("FragmentQList", "doReview 키값 변경 완료");
-//                                                    } else {
-//                                                        Log.e("FragmentQList", "doReview 키값 변경 실패", task.getException());
-//                                                    }
-//                                                }
-//                                            });
-//                                        }
-//                                    }
-//
-//                                    @Override
-//                                    public void onCancelled(@NonNull DatabaseError error) {
-//                                        Log.e("FragmentQList", "데이터 가져오기 실패", error.toException());
-//                                    }
-//                                });
-//                            } else {
-//                                Log.e("FragmentQList", "데이터 추가 실패", task.getException());
-//                            }
-//                        }
-//                    });
-
-
 
 
 

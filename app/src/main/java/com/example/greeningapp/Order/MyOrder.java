@@ -19,7 +19,13 @@ public class MyOrder implements Serializable {
     private  String orderImg;
     private  String dataId;
 
+    private String postcode;
+
     private String doReview;
+
+    private String MyOrderId;
+
+    private String EachOrderedId;
 
     private ArrayList<MyOrder> childModelArrayList;
 
@@ -133,6 +139,26 @@ public class MyOrder implements Serializable {
 
     public void setDataId(String dataId) {
         this.dataId = dataId;
+    }
+
+    public String getPostcode() { return postcode; }
+
+    public void setPostcode(String postcode) { this.postcode = postcode; }
+
+    public String getMyOrderId() {
+        return MyOrderId;
+    }
+
+    public void setMyOrderId(String myOrderId) {
+        MyOrderId = myOrderId;
+    }
+
+    public String getEachOrderedId() {
+        return EachOrderedId;
+    }
+
+    public void setEachOrderedId(String eachOrderedId) {
+        EachOrderedId = eachOrderedId;
     }
 
     public ArrayList<MyOrder> getChildModelArrayList() {

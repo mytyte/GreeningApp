@@ -26,37 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHistoryChildRcyAdapter.ChildViewHolder> {
-////        holder.ordhreviewBtn.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-//////                if (!isReviewCompleted) {
-//////                    isReviewCompleted = true;
-////                    Intent intent = new Intent(cxt, Review_write.class);
-////                    intent.putExtra("isReviewCompleted", isReviewCompleted);//"isReviewCompleted"를 Review_write에 보냄
-////                    holder.ordhreviewBtn.setText("작성 완료");
-//////                } else {
-//////                    holder.ordhreviewBtn.setText("후기 작성 ");
-//////                }
-////            }
-////        });
-//        holder.ordhreviewBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(cxt, Review_write.class);
-//                cxt.startActivity(intent);
-//            }
-//
-//        });
-//    }
-////    // 후기 작성 완료 여부를 변경하는 메서드  //잠시 추가
-////    public void setReviewCompleted(boolean reviewCompleted) {
-////        isReviewCompleted = reviewCompleted;
-////        notifyDataSetChanged();
-////    }
 
     public ArrayList<MyOrder> childModelArrayList;
     Context cxt;
-//    private String isReviewCompleted = "";
         private String isReviewCompleted ;
 
     public OrderHistoryChildRcyAdapter(ArrayList<MyOrder> childModelArrayList, Context mContext) {
@@ -79,14 +51,13 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
         holder.pro_price.setText(childModelArrayList.get(position).getProductPrice());
         holder.ordervalue.setText(childModelArrayList.get(position).getTotalQuantity() + "개");
 
-//        isReviewCompleted = childModelArrayList.get(position).getDoReview();
         String isReviewCompleted = childModelArrayList.get(position).getDoReview();
 
         if ("No".equals(isReviewCompleted)) {
 
         } else if ("Yes".equals(isReviewCompleted)) {
-//            holder.ordhreviewBtn.setText("작성 완료");
-//            holder.ordhreviewBtn.setEnabled(false);
+            holder.ordhreviewBtn.setText("작성 완료");
+            holder.ordhreviewBtn.setEnabled(false);
         }
 
         holder.ordhreviewBtn.setOnClickListener(new View.OnClickListener() {
@@ -95,16 +66,13 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
                 if ("No".equals(isReviewCompleted)) {
                     Intent intent = new Intent(cxt, Review_write.class);
                     intent.putExtra("product", childModelArrayList.get(position));
-//                    Log.d("Order", String.valueOf(childModelArrayList.get(position)+"가져왔음"));
+//                    Log.d("myOrderId", String.valueOf(childModelArrayList.get(position)+"가져왔음"));
                     cxt.startActivity(intent);
                 } else if ("Yes".equals(isReviewCompleted)) {
-                    holder.ordhreviewBtn.setText("작성 완료");
-                    holder.ordhreviewBtn.setEnabled(false);
+
                 }
             }
         });
-
-
 
     }
 
