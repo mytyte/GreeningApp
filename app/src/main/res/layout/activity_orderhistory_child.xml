@@ -48,6 +48,7 @@
                     android:id="@+id/ordhreviewBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
+                    android:textSize="14sp"
                     android:background="@drawable/main_btn"
                     android:text="후기 작성"
                     android:textColor="@color/sub2"

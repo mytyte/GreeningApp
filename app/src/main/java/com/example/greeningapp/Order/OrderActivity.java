@@ -18,6 +18,7 @@ import com.example.greeningapp.Cart.Cart;
 import com.example.greeningapp.Cart.CartAdapter;
 import com.example.greeningapp.Cart.Product;
 import com.example.greeningapp.R;
+import com.example.greeningapp.Review_write;
 import com.example.greeningapp.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -179,6 +180,8 @@ public class OrderActivity extends AppCompatActivity {
                 if (list != null && list.size() > 0) {
                     for (Cart model : list) {
 
+                        String eachOrderedId = model.getDataId();
+
                         final HashMap<String, Object> cartMap = new HashMap<>();
 
                         cartMap.put("productName", model.getProductName());
@@ -190,9 +193,11 @@ public class OrderActivity extends AppCompatActivity {
                         cartMap.put("userName", strOrderName);
                         cartMap.put("phone", strOrderPhone);
                         cartMap.put("address", strOrderAddress);
+//                        cartMap.put("postcode", strOrderPostcode);
                         cartMap.put("orderId", myOrderId);
                         cartMap.put("orderDate", getTime());
                         cartMap.put("orderImg", model.getProductImg());
+                        cartMap.put("eachOrderedId", eachOrderedId);
                         cartMap.put("doReview", "No");   //이걸 주석하면 주문내역이 나타난다.
 
                         // 결제 된 재고만큼 기존 재고에서 변경한 값을 변수에 저장
@@ -202,7 +207,7 @@ public class OrderActivity extends AppCompatActivity {
 
                         // 결제 버튼을 누르면 데이터베이스에 MyOrder 테이블 생성 코드
                         // 데이터베이스 경로 변경됨.
-                        databaseReference.child(firebaseUser.getUid()).child("MyOrder").child(myOrderId).child(model.getDataId()).setValue(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        databaseReference.child(firebaseUser.getUid()).child("MyOrder").child(myOrderId).child(eachOrderedId).setValue(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 Toast.makeText(OrderActivity.this, "주문완료", Toast.LENGTH_SHORT).show();
@@ -248,8 +253,9 @@ public class OrderActivity extends AppCompatActivity {
                         Intent intent = new Intent(OrderActivity.this, OrderCompleteActivity.class);
                         intent.putExtra("orderId", orderId);
                         intent.putExtra("myOrderId", myOrderId);
-
                         startActivity(intent);
+
+
 
                     }
 

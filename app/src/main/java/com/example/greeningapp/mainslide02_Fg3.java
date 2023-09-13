@@ -21,7 +21,7 @@ public class mainslide02_Fg3 extends Fragment{
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.slide02_main3, container, false);
 
-        slide02_main3 = rootView.findViewById(R.id.slide02_main3); // 레이아웃 파일에서 TextView의 ID를 사용하여 뷰를 찾는다.
+        slide02_main3 = rootView.findViewById(R.id.slide02_main3); // 기부 광고
 
         slide02_main3.setOnClickListener(new View.OnClickListener() {
             @Override
