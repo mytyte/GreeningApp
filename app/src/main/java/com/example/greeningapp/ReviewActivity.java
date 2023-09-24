@@ -11,9 +11,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.greeningapp.Donation.DonationMainActivity;
+import com.example.greeningapp.Order.OrderHistoryActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +34,10 @@ public class ReviewActivity extends AppCompatActivity {
     private ArrayList<ReviewData> dataList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private ImageButton back_review;
+
+    //하단바 버튼
+    private ImageButton navMain, navCategory, navDonation, navMypage;
 
 
     @Override
@@ -38,13 +45,13 @@ public class ReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
-        //버튼클릭
-        Button button = findViewById(R.id.button);    //터치x
 
-        button.setOnClickListener(new View.OnClickListener() {
+        back_review = findViewById(R.id.back_review);
+
+        back_review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ReviewActivity.this, Review_write.class);         //터치 x
+                Intent intent = new Intent(ReviewActivity.this, OrderHistoryActivity.class);
                 startActivity(intent);
             }
         });
@@ -118,6 +125,48 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
 
+        // 하단바 아이콘 초기화
+        navMain = findViewById(R.id.navMain);
+        navCategory = findViewById(R.id.navCategory);
+        navDonation = findViewById(R.id.navDonation);
+        navMypage = findViewById(R.id.navMypage);
+
+        // 각 아이콘 클릭 이벤트 처리
+        navMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 홈 아이콘 클릭 시 처리할 내용
+                Intent intent = new Intent(ReviewActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        navCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 카테고리 아이콘 클릭 시 처리할 내용
+                Intent intent = new Intent(ReviewActivity.this, CategoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        navDonation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 기부 아이콘 클릭 시 처리할 내용
+                Intent intent = new Intent(ReviewActivity.this, DonationMainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        navMypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 마이페이지 아이콘 클릭 시 처리할 내용
+                Intent intent = new Intent(ReviewActivity.this, MyPageActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

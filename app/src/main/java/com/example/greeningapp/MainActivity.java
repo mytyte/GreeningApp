@@ -11,9 +11,15 @@ import me.relex.circleindicator.CircleIndicator3;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
+import com.example.greeningapp.Cart.Product;
+import com.example.greeningapp.Donation.DonationMainActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,16 +36,22 @@ public class MainActivity extends FragmentActivity {
     private FragmentStateAdapter pagerAdapter;
     private FragmentStateAdapter pagerAdapter01;
     private final int num_page = 4;    //viewpager2에 2개의 페이지가 표시됨.
-    private final int num_page01 = 4;
+    private final int num_page01 = 3;
     private CircleIndicator3 mIndicator;
     private CircleIndicator3 mIndicator01;
     //상품목록
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<ProductMain> arrayList;
+    private ArrayList<Product> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private Button goToShoppingMain;
+
+//    // 임시 하단바 버튼
+//    private Button mainbtnCart, mainbtnDonation, mainbtnMyPage;
+
+    private ImageButton navMain, navCategory, navDonation, navMypage;
 
     //슬라이드1 화면
     @Override
@@ -51,7 +63,7 @@ public class MainActivity extends FragmentActivity {
         mPager = findViewById(R.id.viewpager);
         mPager01 = findViewById(R.id.viewpager01);
         // Adapter
-        FragmentStateAdapter pagerAdapter = new MainAdapter(this, num_page);//
+        FragmentStateAdapter pagerAdapter = new MainAdapter(this, num_page);
         mPager.setAdapter(pagerAdapter);
 
         FragmentStateAdapter pagerAdapter01 = new MainAdapter01(this, num_page01);
@@ -75,7 +87,7 @@ public class MainActivity extends FragmentActivity {
         mPager01.setOffscreenPageLimit(2);
 
         //상품목록
-        recyclerView = findViewById(R.id.recyclerView); //어디연결
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_main); //아디연결
         recyclerView.setHasFixedSize(true); //리사이클뷰 성능강화
         layoutManager = new LinearLayoutManager(this);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);   //가로2개(추가)
@@ -91,7 +103,7 @@ public class MainActivity extends FragmentActivity {
                 //파이어베이스 데이터베이스의 데이터를 받아오는곳
                 arrayList.clear(); //기준 배열리스트가 존재하지않게 초기화
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) { //반복문으로 데이터리스트 추출
-                    ProductMain product = snapshot.getValue(ProductMain.class);  //만들어뒀던 user객체에 데이터를 담는다
+                    Product product = snapshot.getValue(Product.class);  //만들어뒀던 user객체에 데이터를 담는다
                     arrayList.add(product); //담은 데이터들을 배열리스트에 넣고 리사이클뷰로 보낼준비
                 }
                 adapter.notifyDataSetChanged(); //리스트저장 및 새로고침
@@ -102,7 +114,8 @@ public class MainActivity extends FragmentActivity {
                 Log.e("MainActivity", String.valueOf(databaseError.toException())); //에러문출력
             }
         });
-        adapter = new ProductAdapter(arrayList, this);
+        adapter = new MainProductAdapter(arrayList, this);
+//        adapter = new ProductAdapter(arrayList, this);
         recyclerView.setAdapter(adapter);  //리사이클뷰에 어댑터연결
 
 
@@ -122,6 +135,7 @@ public class MainActivity extends FragmentActivity {
                 mIndicator.animatePageSelected(position % num_page);
             }
         });
+
         //슬라이드2
         mPager01.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -137,5 +151,61 @@ public class MainActivity extends FragmentActivity {
                 mIndicator01.animatePageSelected(position % num_page01);
             }
         });
+
+        goToShoppingMain = (Button) findViewById(R.id.goToShoppingMain);
+        goToShoppingMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+                startActivity(intent);
+
+//                Intent intent = new Intent(MainActivity.this, ShoppingMainActivity.class);
+//                startActivity(intent);
+            }
+        });
+
+        // 하단바 아이콘 초기화
+        navMain = findViewById(R.id.navMain);
+        navCategory = findViewById(R.id.navCategory);
+        navDonation = findViewById(R.id.navDonation);
+        navMypage = findViewById(R.id.navMypage);
+
+        // 각 아이콘 클릭 이벤트 처리
+        navMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 홈 아이콘 클릭 시 처리할 내용
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        navCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 카테고리 아이콘 클릭 시 처리할 내용
+                Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        navDonation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 기부 아이콘 클릭 시 처리할 내용
+                Intent intent = new Intent(MainActivity.this, DonationMainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        navMypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 마이페이지 아이콘 클릭 시 처리할 내용
+                Intent intent = new Intent(MainActivity.this, MyPageActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

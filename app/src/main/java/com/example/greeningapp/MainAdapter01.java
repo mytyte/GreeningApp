@@ -20,7 +20,8 @@ public class MainAdapter01 extends FragmentStateAdapter{
         if(index==0) return new mainslide02_Fg1();
         else if(index==1) return new mainslide02_Fg2();
         else if(index==2) return new mainslide02_Fg3();
-        else return new mainslide02_Fg4();
+        else return null;
+//        else return new mainslide02_Fg4();
     }
 
     @Override

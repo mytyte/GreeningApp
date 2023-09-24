@@ -1,52 +1,44 @@
 package com.example.greeningapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
-import com.example.greeningapp.Cart.Product;
 import com.example.greeningapp.Order.MyOrder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Review_write extends AppCompatActivity {
+public class ReviewWriteActivity extends AppCompatActivity {
 
     private static final int Gallery_Code=1;
 
     FirebaseDatabase mDatabase;
+    DatabaseReference dtf; //잠시추가 0924
     DatabaseReference mRef;
 
     private FirebaseAuth firebaseAuth;
@@ -123,7 +115,7 @@ public class Review_write extends AppCompatActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Review_write.this, ReviewActivity.class);
+                Intent intent = new Intent(ReviewWriteActivity.this, ReviewActivity.class);
                 startActivity(intent);
             }
         });
@@ -170,7 +162,11 @@ public class Review_write extends AppCompatActivity {
                     reviewwriteMap.put("Rating", rating);
                     reviewwriteMap.put("Review_date", reviewDate);
 
-                    mRef.push().setValue(reviewwriteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    int pidInt = product.getProductId(); // 정수 값을 가져온후
+                    String pid = String.valueOf(pidInt);  //문자열로 변환하여 저장
+
+                    mRef.push().child(pid).setValue(reviewwriteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
@@ -190,8 +186,7 @@ public class Review_write extends AppCompatActivity {
                     });
 
 
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Review_write.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ReviewWriteActivity.this);
 
                     builder.setTitle("작성 완료").setMessage("감사합니다!");
 
@@ -199,7 +194,7 @@ public class Review_write extends AppCompatActivity {
                     builder.setPositiveButton("홈 이동", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            Intent intent = new Intent(Review_write.this, MainActivity.class);
+                            Intent intent = new Intent(ReviewWriteActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
                     });
