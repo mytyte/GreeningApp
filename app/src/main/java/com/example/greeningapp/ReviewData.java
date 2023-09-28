@@ -5,6 +5,11 @@ public class ReviewData {
     private String Write_review;
     private float Rating;
     private String Review_date;
+    private String Username;
+
+    public String getUsername() { return Username; }
+
+    public void setUsername(String username) { Username = username; }
 
     public String getReview_image() {
         return Review_image;

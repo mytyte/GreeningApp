@@ -41,6 +41,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomView
         holder.reviewdes.setText(String.valueOf(dataList.get(position).getWrite_review()));
         holder.userrating.setRating(dataList.get(position).getRating());
         holder.reviewdate.setText(dataList.get(position).getReview_date());
+        holder.username.setText(dataList.get(position).getUsername());
 
     }
 
@@ -53,12 +54,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomView
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         ImageView inputimg;
         RatingBar userrating;
+        TextView username;
         TextView reviewdes;
         TextView reviewdate;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             this.inputimg = itemView.findViewById(R.id.inputimg);
+            this.username = itemView.findViewById(R.id.username);
             this.reviewdes = itemView.findViewById(R.id.reviewdes);
             this.userrating = itemView.findViewById(R.id.userrating);
             this.reviewdate = itemView.findViewById(R.id.reviewdate);
