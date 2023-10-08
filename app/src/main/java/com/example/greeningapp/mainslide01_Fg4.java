@@ -27,8 +27,8 @@ public class mainslide01_Fg4 extends Fragment{
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getActivity(), CategoryActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), CategoryActivity.class);
+//                startActivity(intent);
             }
         });
 

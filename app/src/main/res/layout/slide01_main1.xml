@@ -11,7 +11,7 @@
         android:layout_width="400dp"
         android:layout_height="340dp"
         android:gravity="center"
-        android:background="@drawable/big1_"
+        android:background="@drawable/big2_"
         />
 
 
