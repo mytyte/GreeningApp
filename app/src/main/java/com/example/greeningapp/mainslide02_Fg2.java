@@ -34,6 +34,7 @@ public class mainslide02_Fg2 extends Fragment{
             }
         });
 
+
         return rootView;
     }
 }
