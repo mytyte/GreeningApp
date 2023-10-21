@@ -4,7 +4,7 @@ package com.example.greeningapp.Order;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,24 +12,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.greeningapp.R;
-import com.example.greeningapp.ReviewActivity;
-import com.example.greeningapp.Review_write;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ValueEventListener;
+import com.example.greeningapp.ReviewWriteActivity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHistoryChildRcyAdapter.ChildViewHolder> {
 
     public ArrayList<MyOrder> childModelArrayList;
     Context cxt;
-        private String isReviewCompleted ;
+
+    DecimalFormat decimalFormat = new DecimalFormat("###,###");
+
+    private String isReviewCompleted ;
 
     public OrderHistoryChildRcyAdapter(ArrayList<MyOrder> childModelArrayList, Context mContext) {
         this.cxt = mContext;
@@ -48,7 +48,8 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
                 .load(childModelArrayList.get(position).getOrderImg())
                 .into(holder.orderhistory_img);
         holder.pro_name.setText(childModelArrayList.get(position).getProductName());
-        holder.pro_price.setText(childModelArrayList.get(position).getProductPrice());
+        holder.pro_price.setText(childModelArrayList.get(position).getProductPrice()+ "원");
+//        holder.pro_price.setText(String.valueOf(childModelArrayList.get(position).getProductPrice())+ "원");
         holder.ordervalue.setText(childModelArrayList.get(position).getTotalQuantity() + "개");
 
         String isReviewCompleted = childModelArrayList.get(position).getDoReview();
@@ -56,7 +57,9 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
         if ("No".equals(isReviewCompleted)) {
 
         } else if ("Yes".equals(isReviewCompleted)) {
-            holder.ordhreviewBtn.setText("작성 완료");
+            holder.ordhreviewBtn.setText("후기 작성완료");
+            holder.ordhreviewBtn.setBackgroundTintList(ColorStateList.valueOf(cxt.getResources().getColor(R.color.ordh_btn_click))); //버튼색변경
+            holder.ordhreviewBtn.setTextColor(cxt.getResources().getColor(R.color.white)); // 글자색 변경
             holder.ordhreviewBtn.setEnabled(false);
         }
 
@@ -64,7 +67,7 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
             @Override
             public void onClick(View v) {
                 if ("No".equals(isReviewCompleted)) {
-                    Intent intent = new Intent(cxt, Review_write.class);
+                    Intent intent = new Intent(cxt, ReviewWriteActivity.class);
                     intent.putExtra("product", childModelArrayList.get(position));
 //                    Log.d("myOrderId", String.valueOf(childModelArrayList.get(position)+"가져왔음"));
                     cxt.startActivity(intent);
