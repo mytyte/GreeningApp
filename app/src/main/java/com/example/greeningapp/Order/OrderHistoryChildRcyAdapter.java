@@ -26,10 +26,10 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
 
     public ArrayList<MyOrder> childModelArrayList;
     Context cxt;
+    private String isReviewCompleted ;
 
     DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-    private String isReviewCompleted ;
 
     public OrderHistoryChildRcyAdapter(ArrayList<MyOrder> childModelArrayList, Context mContext) {
         this.cxt = mContext;
@@ -48,13 +48,36 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
                 .load(childModelArrayList.get(position).getOrderImg())
                 .into(holder.orderhistory_img);
         holder.pro_name.setText(childModelArrayList.get(position).getProductName());
-        holder.pro_price.setText(childModelArrayList.get(position).getProductPrice()+ "원");
-//        holder.pro_price.setText(String.valueOf(childModelArrayList.get(position).getProductPrice())+ "원");
+        holder.pro_price.setText(decimalFormat.format(Integer.parseInt(childModelArrayList.get(position).getProductPrice())) + "원");
         holder.ordervalue.setText(childModelArrayList.get(position).getTotalQuantity() + "개");
+
+        String state = childModelArrayList.get(position).getOrderstate();
+
+//        if("paid".equals(state)){
+//            holder.OrderState_orderhistory.setText("결제 완료");
+////            holder.OrderState_orderhistory.setVisibility(View.INVISIBLE);
+//        } else if("shipped".equals(state)){
+//            holder.OrderState_orderhistory.setText("배송 완료");
+////            holder.OrderState_orderhistory.setVisibility(View.VISIBLE);
+//        }
+        holder.OrderState_orderhistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ("paid".equals(state)) {
+                    holder.OrderState_orderhistory.setText("결제 완료");
+                    holder.OrderState_orderhistory.setVisibility(View.INVISIBLE);
+                }else if("shipped".equals(state)){
+                    holder.OrderState_orderhistory.setText("배송 완료");
+                    holder.OrderState_orderhistory.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         String isReviewCompleted = childModelArrayList.get(position).getDoReview();
 
         if ("No".equals(isReviewCompleted)) {
+            holder.ordhreviewBtn.setText("후기 작성하기");
+
 
         } else if ("Yes".equals(isReviewCompleted)) {
             holder.ordhreviewBtn.setText("후기 작성완료");
@@ -69,10 +92,11 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
                 if ("No".equals(isReviewCompleted)) {
                     Intent intent = new Intent(cxt, ReviewWriteActivity.class);
                     intent.putExtra("product", childModelArrayList.get(position));
+                    holder.ordhreviewBtn.setVisibility(View.INVISIBLE);
 //                    Log.d("myOrderId", String.valueOf(childModelArrayList.get(position)+"가져왔음"));
                     cxt.startActivity(intent);
                 } else if ("Yes".equals(isReviewCompleted)) {
-
+                    holder.ordhreviewBtn.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -91,6 +115,8 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
         public ImageView orderhistory_img;
         public TextView pro_name, pro_price, ordervalue;
 
+        TextView OrderState_orderhistory;
+
         AppCompatButton ordhreviewBtn;
 
         public ChildViewHolder(View itemView) {
@@ -100,6 +126,7 @@ public class OrderHistoryChildRcyAdapter extends RecyclerView.Adapter<OrderHisto
             pro_price = itemView.findViewById(R.id.pro_price);
             ordervalue = itemView.findViewById(R.id.ordervalue);
             ordhreviewBtn = itemView.findViewById(R.id.ordhreviewBtn);
+            this.OrderState_orderhistory = itemView.findViewById(R.id.OrderState_orderhistory);
         }
     }
 }

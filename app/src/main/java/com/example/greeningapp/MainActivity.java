@@ -38,6 +38,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -162,18 +165,30 @@ public class MainActivity extends FragmentActivity {
         databaseReference = database.getReference("Product");
 
         dreviewReference =FirebaseDatabase.getInstance().getReference("Review");
+        Query query = databaseReference.orderByChild("populstock").limitToLast(10); // populstock 내림차순 최대 10개상품가져옴
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //파이어베이스 데이터베이스의 데이터를 받아오는곳
                 arrayList.clear(); //기준 배열리스트가 존재하지않게 초기화
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Product product = snapshot.getValue(Product.class);
                     arrayList.add(product);
 
-                    pid = product.getPid();
+//                    pid = product.getPid();
 //                    Log.d("MainActivity", "pid = " + pid);
+
+                     //arrayList를 populstock 내림차순 정렬, 값 없는건 pid순
+                    Collections.sort(arrayList, new Comparator<Product>() {
+                        @Override
+                        public int compare(Product product1, Product product2) {
+                            return Integer.compare(product2.getPopulstock(), product1.getPopulstock());
+                        }
+                    });
+
+
 
                     //인텐트코드 잠시추가 10.22
 //                    Intent intent = getIntent();
@@ -230,6 +245,7 @@ public class MainActivity extends FragmentActivity {
 
 
                 }
+
                 adapter.notifyDataSetChanged(); //리스트저장 및 새로고침
                 //db가져오던중 에러발생시
             }
@@ -240,6 +256,7 @@ public class MainActivity extends FragmentActivity {
         });
         adapter = new MainProductAdapter(arrayList, this);
         recyclerView.setAdapter(adapter);
+
 
         //큰 광고
         mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
