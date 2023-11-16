@@ -1,43 +1,38 @@
 package com.example.greeningapp;
 
+
 public class Review {
-    private int rid;
-    private String rtitle;
+    private String rimage;
     private String rcontent;
     private float rscore;
-    private String rdatetime;
-    private String userid;
-    private int pid;
+
     private String pname;
+    private int pid;
+    private  String pimg;
+    private String rdatetime;
+    private String username;
+
+    private String pprice;
+
+    private int totalquantity;
+
+    private String reviewid;
+
+    private String idToken;
+    private User user;
 
     public Review() {
+
     }
 
-    public Review(int rid, String rtitle, String rcontent, float rscore, String rdatetime, String userid, int pid, String pname) {
-        this.rid = rid;
-        this.rtitle = rtitle;
-        this.rcontent = rcontent;
-        this.rscore = rscore;
-        this.rdatetime = rdatetime;
-        this.userid = userid;
-        this.pid = pid;
-        this.pname = pname;
+
+
+    public String getRimage() {
+        return rimage;
     }
 
-    public int getRid() {
-        return rid;
-    }
-
-    public void setRid(int rid) {
-        this.rid = rid;
-    }
-
-    public String getRtitle() {
-        return rtitle;
-    }
-
-    public void setRtitle(String rtitle) {
-        this.rtitle = rtitle;
+    public void setRimage(String rimage) {
+        this.rimage = rimage;
     }
 
     public String getRcontent() {
@@ -64,12 +59,12 @@ public class Review {
         this.rdatetime = rdatetime;
     }
 
-    public String getUserid() {
-        return userid;
+    public String getPname() {
+        return pname;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setPname(String pname) {
+        this.pname = pname;
     }
 
     public int getPid() {
@@ -80,11 +75,50 @@ public class Review {
         this.pid = pid;
     }
 
-    public String getPname() {
-        return pname;
+    public String getPimg() {
+        return pimg;
     }
 
-    public void setPname(String pname) {
-        this.pname = pname;
+    public void setPimg(String pimg) {
+        this.pimg = pimg;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPprice() { return pprice; }
+    public void setPprice(String pprice) { this.pprice = pprice; }
+
+    public int getTotalquantity() {
+        return totalquantity;
+    }
+
+    public void setTotalquantity(int totalquantity) {
+        this.totalquantity = totalquantity;
+    }
+
+    public String getReviewid() {
+        return reviewid;
+    }
+
+    public void setReviewid(String reviewid) {
+        this.reviewid = reviewid;
+    }
+
+    public String getIdToken() { return idToken; }
+
+    public void setIdToken(String idToken) { this.idToken = idToken; }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

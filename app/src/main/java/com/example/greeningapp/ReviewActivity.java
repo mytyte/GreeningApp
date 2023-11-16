@@ -1,5 +1,6 @@
 package com.example.greeningapp;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +19,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.greeningapp.Donation.DonationMainActivity;
+import com.example.greeningapp.Order.MyOrder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +42,8 @@ public class ReviewActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
-    private DatabaseReference databasepp; //잠시추가
+//    private TextView usernameT;
+
 
     private int pid;
 
@@ -64,9 +72,8 @@ public class ReviewActivity extends AppCompatActivity {
 
         databaseReference =FirebaseDatabase.getInstance().getReference("Review");
 
-        //잠시추가 10.19일
-        database = FirebaseDatabase.getInstance();
-        databasepp = database.getReference("Product");
+
+
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("pid")) {
@@ -74,32 +81,80 @@ public class ReviewActivity extends AppCompatActivity {
             Log.d("pid",pid +"가져왔음");
         }
 
-        // pid가 일치하는 상품 리뷰만 가져오기
-        Query reviewQuery = databaseReference.orderByChild("pid").equalTo(pid);
 
+//        // pid가 일치하는 상품 리뷰만 가져오기
+//        Query reviewQuery = databaseReference.orderByChild("pid").equalTo(pid);
+//        reviewQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @SuppressLint("NotifyDataSetChanged")
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                dataList.clear();
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    Review review = snapshot.getValue(Review.class);  //만들어뒀던 review객체에 데이터를 담는다( 리뷰작성시 )
+//                    Log.d("pid",review.getRcontent() +"가져왔음");
+//                    dataList.add(review);
+//                }
+//                reviewAdapter.notifyDataSetChanged();
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Log.e("ReviewActivity", String.valueOf(databaseError.toException()));
+//            }
+//        });
+
+
+//        usernameT = findViewById(R.id.username);
+
+        Query reviewQuery = databaseReference.orderByChild("pid").equalTo(pid);
         reviewQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 dataList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Review review = snapshot.getValue(Review.class);  //만들어뒀던 review객체에 데이터를 담는다( 리뷰작성시 )
-                    Log.d("pid",review.getRcontent() +"가져왔음");
+                    Review review = snapshot.getValue(Review.class);
                     dataList.add(review);
+
+                    String uid = review.getIdToken();
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("User").child(uid);
+                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                User user = dataSnapshot.getValue(User.class);
+                                if (user != null) {
+//                                    usernameT.setText(user.getUsername());
+                                    String username = user.getUsername();
+                                    Log.d("ReviewUsername", "Username: " + username + " 가져왔음");
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("ReviewActivity", "데이터 가져오기 실패: " + databaseError.getMessage());
+                        }
+                    });
                 }
+
                 reviewAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("ReviewActivity", String.valueOf(databaseError.toException()));
+                Log.e("ReviewActivity", "데이터 가져오기 실패: " + databaseError.getMessage());
             }
         });
+
+
+
+
+
+
+
         reviewAdapter = new ReviewAdapter(dataList, this);
         fullreviewrecyclerView.setAdapter(reviewAdapter);
 
-//        // 파이어베이스 데이터베이스 참조 설정 (레이팅바 총점)
-//        FirebaseDatabase mRef = FirebaseDatabase.getInstance();
-//        DatabaseReference ratingsRef = mRef.getReference("Review");
+
 
         // 파이어베이스 레이팅바 총점
         reviewQuery.addValueEventListener(new ValueEventListener() {
@@ -129,14 +184,6 @@ public class ReviewActivity extends AppCompatActivity {
                 float scaledRating = Math.round(averageRating * 5 / 5.0f);  // 평점 값을 5로 스케일링하고 소수점 자리 반올림
                 ratingBar.setRating(scaledRating);
 
-                // ratingBar.setRating(averageRating);
-                //잠시추가 10.19
-//                DatabaseReference productReference = databasepp.child(String.valueOf(pid)).child("pscore");
-//                productReference.setValue(averageRating);
-
-                   //review-pid-psocre참조경로 10.22
-//                DatabaseReference reviewpid = databaseReference.child("pid").child(String.valueOf(pid)).child("pscore");
-//                reviewpid.setValue(averageRating);
 
             }
             @Override
@@ -157,18 +204,22 @@ public class ReviewActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.tab_home) {
                     // Home 액티비티로 이동
                     startActivity(new Intent(ReviewActivity.this, MainActivity.class));
+                    finish();
                     return true;
                 } else if (item.getItemId() == R.id.tab_shopping) {
                     // Category 액티비티로 이동
                     startActivity(new Intent(ReviewActivity.this, CategoryActivity.class));
+                    finish();
                     return true;
                 } else if (item.getItemId() == R.id.tab_donation) {
                     // Donation 액티비티로 이동
                     startActivity(new Intent(ReviewActivity.this, DonationMainActivity.class));
+                    finish();
                     return true;
                 } else if (item.getItemId() == R.id.tab_mypage) {
                     // My Page 액티비티로 이동
                     startActivity(new Intent(ReviewActivity.this, MyPageActivity.class));
+                    finish();
                     return true;
                 }
                 return false;
