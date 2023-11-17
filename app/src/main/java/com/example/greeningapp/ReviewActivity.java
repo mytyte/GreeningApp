@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,11 +40,7 @@ public class ReviewActivity extends AppCompatActivity {
     private ReviewAdapter reviewAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Review> dataList;
-    private FirebaseDatabase database;
     private DatabaseReference databaseReference;
-
-//    private TextView usernameT;
-
 
     private int pid;
 
@@ -64,16 +61,13 @@ public class ReviewActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        fullreviewrecyclerView = findViewById(R.id.fullrecyclerView); //연결
-        fullreviewrecyclerView.setHasFixedSize(true); //리사이클뷰 성능강화
+        fullreviewrecyclerView = findViewById(R.id.fullrecyclerView);
+        fullreviewrecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         fullreviewrecyclerView.setLayoutManager(layoutManager);
-        dataList = new ArrayList<>(); //Product객체를 담을 ArrayList(어댑터쪽으로)
+        dataList = new ArrayList<>();
 
         databaseReference =FirebaseDatabase.getInstance().getReference("Review");
-
-
-
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("pid")) {
@@ -81,29 +75,6 @@ public class ReviewActivity extends AppCompatActivity {
             Log.d("pid",pid +"가져왔음");
         }
 
-
-//        // pid가 일치하는 상품 리뷰만 가져오기
-//        Query reviewQuery = databaseReference.orderByChild("pid").equalTo(pid);
-//        reviewQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @SuppressLint("NotifyDataSetChanged")
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                dataList.clear();
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Review review = snapshot.getValue(Review.class);  //만들어뒀던 review객체에 데이터를 담는다( 리뷰작성시 )
-//                    Log.d("pid",review.getRcontent() +"가져왔음");
-//                    dataList.add(review);
-//                }
-//                reviewAdapter.notifyDataSetChanged();
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Log.e("ReviewActivity", String.valueOf(databaseError.toException()));
-//            }
-//        });
-
-
-//        usernameT = findViewById(R.id.username);
 
         Query reviewQuery = databaseReference.orderByChild("pid").equalTo(pid);
         reviewQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -114,26 +85,6 @@ public class ReviewActivity extends AppCompatActivity {
                     Review review = snapshot.getValue(Review.class);
                     dataList.add(review);
 
-                    String uid = review.getIdToken();
-                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("User").child(uid);
-                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                User user = dataSnapshot.getValue(User.class);
-                                if (user != null) {
-//                                    usernameT.setText(user.getUsername());
-                                    String username = user.getUsername();
-                                    Log.d("ReviewUsername", "Username: " + username + " 가져왔음");
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.e("ReviewActivity", "데이터 가져오기 실패: " + databaseError.getMessage());
-                        }
-                    });
                 }
 
                 reviewAdapter.notifyDataSetChanged();
@@ -145,15 +96,8 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-        reviewAdapter = new ReviewAdapter(dataList, this);
+        reviewAdapter = new ReviewAdapter(dataList, FirebaseAuth.getInstance(), FirebaseDatabase.getInstance().getReference("User"));
         fullreviewrecyclerView.setAdapter(reviewAdapter);
-
 
 
         // 파이어베이스 레이팅바 총점
