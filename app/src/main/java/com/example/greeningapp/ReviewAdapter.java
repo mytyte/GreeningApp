@@ -1,14 +1,11 @@
 package com.example.greeningapp;
 
-
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -69,12 +66,18 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomView
         // 사용자 이름 업데이트
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         if (user != null) {
-            String uid = user.getUid();
+            // 현재 로그인된 사용자의 UID 가져오기
+            String uid = dataList.get(position).getIdToken();
+
+            // 사용자의 데이터베이스 참조 가져오기
             DatabaseReference userRef = mDatabaseRef.child(uid);
+
+            //실시간으로 사용자 데이터 변경시 감지
             userRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
+                        // 사용자 이름을 데이터베이스에서 가져와서 화면의 TextView에 설정
                         String name = dataSnapshot.child("username").getValue(String.class) ;
                         holder.username.setText(name);
                     }
@@ -91,7 +94,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomView
 
     @Override
     public int getItemCount() {
-        //삼합연산자
         return (dataList !=null ? dataList.size() :0);
     }
 

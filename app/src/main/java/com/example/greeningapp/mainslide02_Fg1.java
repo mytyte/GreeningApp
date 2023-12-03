@@ -10,10 +10,9 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.greeningapp.Attendance.AttendanceActivity;
-import com.example.greeningapp.shop.ShoppingMainActivity;
 
 public class mainslide02_Fg1 extends Fragment{
-
+    //작은 광고 첫번째 페이지
     private TextView slide02_main1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -21,12 +20,12 @@ public class mainslide02_Fg1 extends Fragment{
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.slide02_main1, container, false);
 
-        slide02_main1 = rootView.findViewById(R.id.slide02_main1); //출석체크 광고
+        slide02_main1 = rootView.findViewById(R.id.slide02_main1);
 
+        //AttendanceActivity로 이동
         slide02_main1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getActivity(), AttendanceActivity.class);
                 startActivity(intent);
             }
